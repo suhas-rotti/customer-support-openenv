@@ -16,7 +16,7 @@ from env import SmartCustomerSupportEnv
 
 API_BASE_URL = os.getenv("API_BASE_URL", "not_used")
 MODEL_NAME = os.getenv("MODEL_NAME", "not_used")
-HF_TOKEN = os.getenv("HF_TOKEN", "not_used")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 try:
     from openai import OpenAI

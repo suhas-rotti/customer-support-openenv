@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "customer-support-openenv"
+version = "0.1.0"
+description = "Smart Customer Support OpenEnv environment"
+authors = [
+    { name = "Suhas" }
+]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic"
+]
+
+requires-python = ">=3.8"
+
+[tool.setuptools]
+packages = ["."]

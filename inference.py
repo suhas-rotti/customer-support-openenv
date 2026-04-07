@@ -1,5 +1,6 @@
 """
 Offline OpenEnv-style inference script for SmartCustomerSupportEnv.
+
 This script keeps hackathon-compatible environment variable support and
 attempts a LiteLLM proxy call before running offline evaluation.
 """
@@ -90,33 +91,34 @@ def run_level(env: SmartCustomerSupportEnv, level: str, episodes: int) -> None:
     print(f"Final Score: {average(rewards):.3f}")
 
 
-# 👇 THIS MUST BE OUTSIDE (NO INDENT)
 def main() -> None:
     configure_output_encoding()
 
     print("Making LLM proxy call...")
 
-    # FORCE usage of hackathon environment
-    base_url = os.environ["API_BASE_URL"]
-    api_key = os.environ["API_KEY"]
-
-    client = OpenAI(
-        base_url=base_url,
-        api_key=api_key
-    )
-
+    # 👇 THIS WHOLE BLOCK INSIDE TRY
     try:
+        base_url = os.environ["API_BASE_URL"]
+        api_key = os.environ["API_KEY"]
+
+        client = OpenAI(
+            base_url=base_url,
+            api_key=api_key
+        )
+
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": "Ping"}],
             max_tokens=1
         )
+
         print("LLM proxy call SUCCESS")
 
     except Exception as e:
         print("LLM proxy call attempted but failed")
         print(str(e))
 
+    # 👇 this stays same
     env = SmartCustomerSupportEnv(seed=42)
 
     for index, level in enumerate(LEVELS):

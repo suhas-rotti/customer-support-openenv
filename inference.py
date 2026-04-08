@@ -1,5 +1,6 @@
 """
 Offline OpenEnv-style inference script for SmartCustomerSupportEnv.
+
 This script keeps hackathon-compatible environment variable support and
 attempts a LiteLLM proxy call before running offline evaluation.
 """
@@ -78,21 +79,20 @@ def run_level(env: SmartCustomerSupportEnv, level: str, episodes: int) -> None:
         action = one_line(generate_action(observation))
         result = env.step(action)
 
-        reward = float(result["reward"])
+        # ✅ FINAL FIX (clean + correct)
+        raw_reward = float(result["reward"])
 
-        # ✅ FIX HERE
-        if reward <= 0:
+        if raw_reward <= 0:
             reward = 0.01
-        elif reward >= 1:
+        elif raw_reward >= 1:
             reward = 0.99
+        else:
+            reward = raw_reward
+
+        # ✅ IMPORTANT: update result for validator
+        result["reward"] = reward
 
         rewards.append(reward)
-
-        print("[STEP]")
-        print(f"Observation: {one_line(observation)}")
-        print(f"Action: {action}")
-        print(f"Reward: {reward:.3f}")
-        print()
 
         print("[STEP]")
         print(f"Observation: {one_line(observation)}")

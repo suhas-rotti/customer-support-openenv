@@ -1,0 +1,52 @@
+name: smart_customer_support_system
+version: 1.0.0
+description: >
+  A text-based OpenEnv-style reinforcement learning environment for customer
+  support conversations. The environment provides a customer query as the
+  observation and expects a text support reply as the action.
+metadata:
+  language: python
+  framework: fastapi
+  inference_script: inference.py
+  docker_ready: true
+entry_point: env:SmartCustomerSupportEnv
+service:
+  root: /
+  reset: /reset
+  step: /step
+  state: /state
+observation:
+  type: text
+  description: Customer support query in natural language.
+action:
+  type: text
+  description: AI-generated customer support response in natural language.
+reward:
+  type: float
+  min: 0.01
+  max: 0.99
+available_tasks:
+  - easy
+  - medium
+  - hard
+tasks:
+  - id: easy
+    name: Easy Customer Support
+    description: Handle simple queries
+    difficulty: easy
+    grader: graders:grade_easy
+  - id: medium
+    name: Medium Customer Support
+    description: Handle multi-intent queries
+    difficulty: medium
+    grader: graders:grade_medium
+  - id: hard
+    name: Hard Customer Support
+    description: Handle escalation cases
+    difficulty: hard
+    grader: graders:grade_hard
+api:
+  root: "GET /"
+  reset: "GET /reset?level=<easy|medium|hard>"
+  step: "POST /step"
+  state: "GET /state"
